@@ -35,11 +35,6 @@ CREATE TABLE items(
     initial_price INTEGER CHECK (initial_price >= 0) NOT NULL,
     condition TEXT NOT NULL,
     description TEXT NOT NULL,
-    city TEXT NOT NULL,
-    region_or_state TEXT NOT NULL,
-    country TEXT NOT NULL,
-    latitude TEXT,
-    longitude TEXT,
     seller_username TEXT NOT NULL REFERENCES users ON DELETE CASCADE,
     is_sold BOOLEAN NOT NULL DEFAULT FALSE
 );
@@ -57,8 +52,8 @@ CREATE TABLE item_types(
 
 CREATE TABLE items_to_types(
     id SERIAL PRIMARY KEY,
-    item_id INTEGER NOT NULL REFERENCES items,
-    type_id INTEGER NOT NULL REFERENCES item_types
+    item_id INTEGER NOT NULL REFERENCES items ON DELETE CASCADE,
+    type_id INTEGER NOT NULL REFERENCES item_types ON DELETE CASCADE
 );
 
 CREATE TABLE messages(
@@ -74,6 +69,7 @@ CREATE TABLE reviews(
     id SERIAL PRIMARY KEY,
     reviewed_username TEXT NOT NULL REFERENCES users,
     reviewer_username TEXT NOT NULL REFERENCES users,
+    rating INTEGER NOT NULL,
     body TEXT NOT NULL,
     made_at timestamp with time zone NOT NULL
 );
@@ -85,3 +81,10 @@ CREATE TABLE reports(
     body TEXT NOT NULL,
     made_at timestamp with time zone NOT NULL
 );
+
+INSERT INTO item_types (name) VALUES 
+('electronics'),
+('music'),
+('books'),
+('games'),
+('automobiles');
