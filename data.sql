@@ -19,6 +19,8 @@ CREATE TABLE users(
     first_name TEXT NOT NULL,
     last_name TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE CHECK (position('@' IN email) > 1),
+    address TEXT NOT NULL,
+    zip_code VARCHAR(10) NOT NULL,
     city TEXT NOT NULL,
     region_or_state TEXT NOT NULL,
     country TEXT NOT NULL,
@@ -52,8 +54,8 @@ CREATE TABLE item_types(
 
 CREATE TABLE items_to_types(
     id SERIAL PRIMARY KEY,
-    item_id INTEGER NOT NULL REFERENCES items ON DELETE CASCADE,
-    type_id INTEGER NOT NULL REFERENCES item_types ON DELETE CASCADE
+    item_id INTEGER NOT NULL REFERENCES items,
+    type_id INTEGER NOT NULL REFERENCES item_types 
 );
 
 CREATE TABLE messages(
@@ -82,9 +84,33 @@ CREATE TABLE reports(
     made_at timestamp with time zone NOT NULL
 );
 
+INSERT INTO users 
+(username, password, first_name, last_name, email, address, zip_code,
+city, region_or_state, country, latitude, longitude, is_admin, is_flagged)
+VALUES
+('testuser', '$2b$12$EGmCkmgZsSh38Of610hVUuamBaEgfnXLOR6/SIQTCkrVd8soAOb0y', 'test', 'user',
+'testuser@gmail.com', '4444 Main Street', '12345', 'Little Rock', 'Arkansas', 'United States of America', '34.74648', '-92.28959',
+FALSE, FALSE),
+('testadmin', '$2b$12$EGmCkmgZsSh38Of610hVUuamBaEgfnXLOR6/SIQTCkrVd8soAOb0y', 'test', 'admin',
+'testadmin@gmail.com', '4445 Main Street', '12345', 'Little Rock', 'Arkansas', 'United States of America', '34.74648', '-92.28959',
+TRUE, FALSE),
+('flaggeduser', '$2b$12$EGmCkmgZsSh38Of610hVUuamBaEgfnXLOR6/SIQTCkrVd8soAOb0y', 'flagged', 'user',
+'flaggeduser@gmail.com', '4446 Main Street', '12345', 'Little Rock', 'Arkansas', 'United States of America', '34.74648', '-92.28959',
+FALSE, TRUE);
+
+
+
 INSERT INTO item_types (name) VALUES 
 ('electronics'),
 ('music'),
 ('books'),
 ('games'),
-('automobiles');
+('automobiles'),
+('toys'),
+('infant care'),
+('lawn care'),
+('furniture'),
+('movies'),
+('cooking'),
+('clothing'),
+('art');
